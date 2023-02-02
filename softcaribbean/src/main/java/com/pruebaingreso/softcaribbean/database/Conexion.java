@@ -10,7 +10,7 @@ public class Conexion {
     }
     public void Conect(){
         try {
-            String URL = "jdbc:mysql://localhost:3306/ventas";
+            String URL = "jdbc:mysql://localhost:3306/veterinaria";
             con = DriverManager.getConnection(URL,"root","admin");
             con.setAutoCommit(false);
         }catch (Exception e){

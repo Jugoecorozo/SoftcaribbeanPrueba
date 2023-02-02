@@ -16,7 +16,7 @@ import java.util.List;
 @Component
 public class PacienteDao implements IntPaciente{
     Conexion con= ManagerConexion.getInstance().getConexion();
-    @Override
+
     public void Insert(Paciente p) throws DaoException {
         String INSERT = "INSERT INTO paciente (idPaciente, nomPaciente, especie, raza, fechaNac, idPromascota, fechaIng" +
                 "ciudad,direccion,tel) VALUES (?,?,?,?,?,?)";
@@ -44,7 +44,7 @@ public class PacienteDao implements IntPaciente{
         }
     }
 
-    @Override
+
     public void Update(Paciente p) throws DaoException {
         String UPDATE = "UPDATE paciente " +
                 "SET nomPaciente = ?," +
@@ -78,7 +78,7 @@ public class PacienteDao implements IntPaciente{
         }
     }
 
-    @Override
+
     public void Delete(Paciente p) throws DaoException {
         String DELETE = "DELETE FROM paciente WHERE idPaciente = ?) ";
         PreparedStatement statement = null;
@@ -98,14 +98,11 @@ public class PacienteDao implements IntPaciente{
         }
     }
 
-    @Override
+
     public List<Paciente> SelectAll() throws DaoException {
         Connection connection=ManagerConexion.getInstance().getConexion().getCon();
-        String SQL = "SELECT idPaciente, nomPaciente, nomEspecie, nomRaza,fechaNac, numId, fechaIng " +
-                "FROM paciente " +
-                "JOIN especie ON paciente.especie = especie.idEspecie " +
-                "JOIN raza ON paciente.raza = raza.idRaza " +
-                "JOIN propietario ON paciente.idProMascota = propietario.idPropietario";
+        //String SQL = "SELECT idPaciente, nomPaciente, nomEspecie, nomRaza,fechaNac, numId, fechaIng FROM veterinaria.paciente JOIN especie ON paciente.especie = especie.idEspecie JOIN raza ON paciente.raza = raza.idRaza JOIN propietario ON paciente.idProMascota = propietario.idPropietario";
+        String SQL = "SELECT idPaciente, nomPaciente,especie,raza,fechaNac,numId,fechaIng FROM veterinaria.paciente order by idPaciente";
         PreparedStatement statement = null;
         ResultSet resultSet=null;
         List<Paciente> lista= new ArrayList<>();
@@ -119,16 +116,17 @@ public class PacienteDao implements IntPaciente{
                 p = new Paciente();
                 p.setIdPaciente(resultSet.getString("idPaciente"));
                 p.setNomPaciente(resultSet.getString("nomPaciente"));
-                p.setEspecie(resultSet.getString("nomEspecie"));
-                p.setRaza(resultSet.getString("nomRaza"));
-                p.setFechaNac(resultSet.getString("fechaNac"));
+                p.setEspecie(resultSet.getString("especie"));
+                p.setRaza(resultSet.getString("raza"));
+                p.setFechaNac(String.valueOf(resultSet.getDate("fechaNac")));
                 p.setIdProMascota(resultSet.getString("numId"));
-                p.setFechaIng(resultSet.getString("fechaIng"));
+                p.setFechaIng(String.valueOf(resultSet.getDate("fechaIng")));
                 lista.add(p);
             }
         }catch (Exception e){
             throw new DaoException(e);
         }
+
         return lista;
     }
 
